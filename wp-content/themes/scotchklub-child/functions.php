@@ -6,9 +6,9 @@ define('SK_INTERNAL_CATEGORY', 15);
 define('SK_BLOCKED_POST_TITLE', 'Scotchklub-Mitglied?');
 
 // Exclude internal categories from category pages if not logged in
-add_action( 'pre_get_posts', 'sk_exclude_internal_category' );
+add_action( 'pre_get_posts', function ($query) { if (!is_user_logged_in()) $query->set( 'cat', '-'.SK_INTERNAL_CATEGORY );});
 
-// Block Post if ancestor is internal category
+// Block Content if is internal
 add_filter('wpmem_block', 'sk_block_internal_post');
 
 // Modify Post/Page-Content if blocked
@@ -72,24 +72,48 @@ function sk_exclude_internal_category( $query )
 }
 
 
-// Redirect to Login-Page if user tries to access a blocked article
+// Overwrite plugin-settings for blocked content and set blocked = true
 function sk_block_internal_post( $block )
 {
 
-	$cats = get_the_category();
-	$is_internal = $block;
+	// Do not block anything if user is logged in
+	if (is_user_logged_in()) return false;
+	
+	// Pages blocked by default
+	if (is_page()) return $block;
+	
+	// Posts are blocked if published in internal category
+	if (is_single()) {
+	
+		$cats = get_the_category();
+		$is_internal = $block;
+	
+		foreach ($cats as $cat) {
+	
+			$is_internal = (cat_is_ancestor_of(SK_INTERNAL_CATEGORY, $cat->term_id) OR ($cat->term_id == SK_INTERNAL_CATEGORY))
+				? true
+				: false;
+			if ($is_internal) break;
+	
+		}
+	
+		return $is_internal;
+		
+	}
 
-	foreach ($cats as $cat) {
-
-		$is_internal = (cat_is_ancestor_of(SK_INTERNAL_CATEGORY, $cat->term_id) OR ($cat->term_id == SK_INTERNAL_CATEGORY))
-		? true
-		: false;
-		if ($is_internal) break;
-
+	// Set internal categories to blocked
+	if (is_archive()) {
+		
+		$cat = get_category(get_query_var('cat'));
+			$is_internal = (cat_is_ancestor_of(SK_INTERNAL_CATEGORY, $cat->term_id) OR ($cat->term_id == SK_INTERNAL_CATEGORY))
+			? true
+			: false;
+		return $is_internal;	
+	
 	}
 	
-	return $is_internal;
-
+	return $block;
+	
 }
 
 
