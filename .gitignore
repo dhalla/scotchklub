@@ -1,0 +1,36 @@
+# Ignore everything in the root except the "wp-content" directory.
+/*
+!.gitignore
+!wp-content/
+!_project/*
+
+# Ignore everything in the "wp-content" directory, except the "plugins"
+# and "themes" directories.
+wp-content/*
+!wp-content/plugins/
+!wp-content/themes/
+
+# Standard-Stuff
+
+*.tmproj
+.settings
+.project
+.buildpath
+.DS_Store
+# Project-Files
+___Kopie*
+.buildpath
+.project
+.settings
+.svn
+.*~
+*~
+._*
+.DS_Store
+_project
+Icon
+Icon?
+
+
+
+
