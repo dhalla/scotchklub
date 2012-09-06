@@ -12,10 +12,10 @@ add_action( 'pre_get_posts', 'sk_exclude_internal_category' );
 add_filter('wpmem_block', 'sk_block_internal_post');
 
 // Modify Post/Page-Content if blocked
-add_action( 'the_post', 'sk_modify_internal_post');
+add_filter( 'the_post', 'sk_modify_internal_post');
 
 // Modify Pagetitle if blocked
-// @todo
+add_filter( 'wp_title', function ($title) { return(!wpmem_block()) ? $title : SK_BLOCKED_POST_TITLE; } );
 
 // Register additional nav menues
 register_nav_menus( array(
@@ -99,9 +99,10 @@ function sk_modify_internal_post( $post ){
 	if(wpmem_block() AND !is_user_logged_in()) {
 		$post->post_title = SK_BLOCKED_POST_TITLE;
 		$post->comment_status = 'closed';
-		$post->post_status = 'private';
-		$post->blocked = wpmem_block();
+		#$post->post_status = 'private';
 	}
+	
+	$post->is_blocked = wpmem_block();
 	
 	#print_r($post);
 	#if(wpmem_block() echo "BLOCKED" else echo "NOT BLOCKED";
@@ -114,15 +115,15 @@ function sk_public_categories ( $args )
 {
 	
 	$list = wp_list_categories( array (
-		'echo' 				=> 0,
-		'title_li'			=> '',
-		#'show_option_all'   => 'Blog',
-		'orderby'           => 'id',
-		'style'             => 'list',
-		'use_desc_for_title'=> 1,
-		#'child_of'          => 1,
-		'exclude_tree'           => SK_INTERNAL_CATEGORY,
-		'hierarchical'      => false,
+		'echo' 					=> 0,
+		'title_li'				=> '',
+		#'show_option_all'   	=> 'Blog',
+		'orderby'           	=> 'id',
+		'style'             	=> 'list',
+		'use_desc_for_title'	=> 1,
+		#'child_of'          	=> 1,
+		'exclude_tree'      	=> SK_INTERNAL_CATEGORY,
+		'hierarchical'      	=> false,
 	));
 	
 	echo "<aside id='' class='widget well widget_categories'><h2>Kategorien</h2><ul>";

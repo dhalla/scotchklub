@@ -19,8 +19,7 @@ get_header(); ?>
 		while ( have_posts() ) {
 			the_post();
 			get_template_part( '/partials/content', 'single' );
-			#if ($post->comment_status);
-						comments_template();
+			if (!$post->is_blocked) comments_template();
 		} ?>
 		
 		<nav id="nav-single" class="pager">
