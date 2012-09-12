@@ -38,7 +38,7 @@ get_header(); ?>
 </section><!-- #primary -->
 
 <?php
-get_sidebar();
+(is_user_logged_in()) ? get_sidebar( 'sk_member' ) : get_sidebar();
 get_footer();
 
 

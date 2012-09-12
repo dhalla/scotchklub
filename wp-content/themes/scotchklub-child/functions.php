@@ -1,9 +1,8 @@
 <?php 
 
-
 // Internal Cat-ID
 define('SK_INTERNAL_CATEGORY', 15);
-define('SK_BLOCKED_POST_TITLE', 'Scotchklub-Mitglied?');
+define('SK_BLOCKED_POST_TITLE', 'Mitglieder-Bereich');
 
 // Exclude internal categories from category pages if not logged in
 add_action( 'pre_get_posts', function ($query) { if (!is_user_logged_in()) $query->set( 'cat', '-'.SK_INTERNAL_CATEGORY );});
@@ -19,7 +18,7 @@ add_filter( 'wp_title', function ($title) { return(!wpmem_block()) ? $title : SK
 
 // Register additional nav menues
 register_nav_menus( array(
-		'sk_member-menu' => 'SK Navigation Member'
+#		'sk_member-menu' => 'SK Navigation Member',
 ));
 
 // Register additional sidebars
@@ -156,26 +155,35 @@ function sk_public_categories ( $args )
 	
 }
 
+
 // Internal category list
 function sk_member_categories ( $args )
 {
-
-	$list = wp_list_categories( array (
-			'echo' 				=> 0,
-			'title_li'			=> '',
-			#'show_option_all'   => 'Home',
-			'orderby'           => 'name',
-			'style'             => 'list',
-			'use_desc_for_title'=> 1,
-			'child_of'          => 1,
-			'exclude'           => SK_INTERNAL_CATEGORY,
-			'hierarchical'      => false,
-			'current_category'  => 1,
+	$list_external = wp_list_categories( array (
+		'echo' 					=> 0,
+		'title_li'				=> '',
+		'orderby'           	=> 'id',
+		'style'             	=> 'list',
+		'exclude_tree'      	=> SK_INTERNAL_CATEGORY,
+		'hierarchical'      	=> false,
+	));
+	$list_internal = wp_list_categories( array (
+		'echo' 				=> 0,
+		'title_li'			=> '',
+		#'show_option_all'   => 'Home',
+		'orderby'           => 'id',
+		'style'             => 'list',
+		'exclude_tree'		=> 1,
+		'hierarchical'      => false,
 	));
 
-	echo "<aside id='' class='widget well widget_categories'><h2>Kategorien</h2><ul>";
-	echo $list;
-	echo "</ul></aside>";
+
+	echo "<aside id='' class='widget well widget_categories'><h2>Kategorien</h2>";
+	echo "<h3>Öffentlich</h3>";	
+	echo "<ul>".$list_external."</ul>";	
+	echo "<h3>Intern</h3>";
+	echo "<ul>".$list_internal."</ul>";	
+	echo "</aside>";
 
 }
 
