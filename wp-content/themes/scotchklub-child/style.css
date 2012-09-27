@@ -9,8 +9,4 @@
  *
  */
 
-.current-cat a {font-weight: bold; }
-.current-category-ancestor a {color: white !important;}
-
-h1 a { color: #000; }
-h1 a:hover { color: #444; }
+/* @import url(http://fonts.googleapis.com/css?family=Lora:400,700); */

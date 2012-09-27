@@ -12,7 +12,7 @@
 tha_entry_before(); ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
-	<?php tha_entry_top(); ?>
+<?php tha_entry_top(); ?>
 	
 	<header class="page-header">
 	<?php if ( is_sticky() AND is_home() ) : ?>

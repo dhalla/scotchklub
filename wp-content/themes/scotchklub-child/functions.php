@@ -4,6 +4,9 @@
 define('SK_INTERNAL_CATEGORY', 15);
 define('SK_BLOCKED_POST_TITLE', 'Mitglieder-Bereich');
 
+// Enqueue Additional Scripts / CSS
+add_action('wp_enqueue_scripts', 'sk_scripts_styles');
+
 // Exclude internal categories from category pages if not logged in
 add_action( 'pre_get_posts', function ($query) { if (!is_user_logged_in()) $query->set( 'cat', '-'.SK_INTERNAL_CATEGORY );});
 
@@ -20,6 +23,13 @@ add_filter( 'wp_title', function ($title) { return(!wpmem_block()) ? $title : SK
 register_nav_menus( array(
 #		'sk_member-menu' => 'SK Navigation Member',
 ));
+
+// Remove Parent-Theme Features
+add_action( 'after_setup_theme', function(){
+	global $_wp_theme_features;
+	unset( $_wp_theme_features['custom-background'] );
+	unset( $_wp_theme_features['custom-header'] );
+}, 20);
 
 // Register additional sidebars
 register_sidebar( array(
@@ -58,6 +68,15 @@ wp_register_sidebar_widget(
 
 
 // ==========================================================================================
+
+
+// Additional Scripts
+function sk_scripts_styles() {
+	wp_enqueue_script('sk-vegas-js', get_bloginfo('stylesheet_directory') . "/js/jquery.vegas.js", array('jquery'), false, true);
+	wp_enqueue_script('sk-js', get_bloginfo('stylesheet_directory') . "/js/scotchklub.js", array('jquery', 'sk-vegas-js'), false, true);
+	wp_enqueue_style('sk-vegas', get_bloginfo('stylesheet_directory') . "/css/jquery.vegas.css", array());
+	wp_enqueue_style('sk', get_bloginfo('stylesheet_directory') . "/css/scotchklub.css", array('tw-bootstrap', 'the-bootstrap', 'sk-vegas'));
+}
 
 
 // Exclude internal categories from category pages if not logged in

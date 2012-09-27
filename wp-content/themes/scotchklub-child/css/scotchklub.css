@@ -1,0 +1,56 @@
+
+/* Allgemein */
+
+body {
+	font-family: "Lora", "Georgia", serif;
+	background-color: black;
+}
+
+.navbar {
+	border-bottom: 1px solid #444;
+}
+
+header#branding hgroup, header#branding img {
+	margin: 0;
+}
+
+#page {
+	background-color: rgba(000, 000, 000, 0.5);
+ 	color: rgba(000, 000, 000, 0.8);
+	border: 1px solid black;
+}
+
+#primary {
+	background-color: whiteSmoke;
+	border: 1px solid #E3E3E3;
+}
+#primary #content {
+	padding: 0 20px;
+}
+
+#page-footer {
+	margin: 20px 0 0 0;
+}
+
+.well {
+	border-radius: 0;
+}
+
+
+
+/* Navigation */
+
+.current-cat a {font-weight: bold; }
+.current-category-ancestor a {color: white !important;}
+
+/* Content */
+
+h1, h2  {  font-size: 25px;  } 
+h1 a { color: #000; }
+h1 a:hover { color: #444; }
+#secondary h2 { line-height: 1em; }
+a { color: #218500; }
+a:hover { color: #005214; }
+
+
+
